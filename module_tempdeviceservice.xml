@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_tempdeviceservice" default="compile.module.tempdeviceservice">
+  <dirname property="module.tempdeviceservice.basedir" file="${ant.file.module_tempdeviceservice}"/>
+  
+  <property name="module.jdk.home.tempdeviceservice" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.tempdeviceservice" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.tempdeviceservice" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.tempdeviceservice" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="tempdeviceservice.output.dir" value="${module.tempdeviceservice.basedir}/out/production/TempDeviceService"/>
+  <property name="tempdeviceservice.testoutput.dir" value="${module.tempdeviceservice.basedir}/out/test/TempDeviceService"/>
+  
+  <path id="tempdeviceservice.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="tempdeviceservice.module.production.classpath">
+    <path refid="${module.jdk.classpath.tempdeviceservice}"/>
+    <path refid="library.fastjson-1.1.22.classpath"/>
+  </path>
+  
+  <path id="tempdeviceservice.runtime.production.module.classpath">
+    <pathelement location="${tempdeviceservice.output.dir}"/>
+    <path refid="library.fastjson-1.1.22.classpath"/>
+  </path>
+  
+  <path id="tempdeviceservice.module.classpath">
+    <path refid="${module.jdk.classpath.tempdeviceservice}"/>
+    <pathelement location="${tempdeviceservice.output.dir}"/>
+    <path refid="library.fastjson-1.1.22.classpath"/>
+  </path>
+  
+  <path id="tempdeviceservice.runtime.module.classpath">
+    <pathelement location="${tempdeviceservice.testoutput.dir}"/>
+    <pathelement location="${tempdeviceservice.output.dir}"/>
+    <path refid="library.fastjson-1.1.22.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.tempdeviceservice">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.tempdeviceservice">
+    <patternset refid="excluded.from.module.tempdeviceservice"/>
+  </patternset>
+  
+  <path id="tempdeviceservice.module.sourcepath">
+    <dirset dir="${module.tempdeviceservice.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.tempdeviceservice" depends="compile.module.tempdeviceservice.production,compile.module.tempdeviceservice.tests" description="Compile module TempDeviceService"/>
+  
+  <target name="compile.module.tempdeviceservice.production" depends="register.custom.compilers" description="Compile module TempDeviceService; production classes">
+    <mkdir dir="${tempdeviceservice.output.dir}"/>
+    <javac2 destdir="${tempdeviceservice.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.tempdeviceservice}/javac">
+      <compilerarg line="${compiler.args.tempdeviceservice}"/>
+      <bootclasspath refid="tempdeviceservice.module.bootclasspath"/>
+      <classpath refid="tempdeviceservice.module.production.classpath"/>
+      <src refid="tempdeviceservice.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.tempdeviceservice"/>
+    </javac2>
+    
+    <copy todir="${tempdeviceservice.output.dir}">
+      <fileset dir="${module.tempdeviceservice.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.tempdeviceservice.tests" depends="register.custom.compilers,compile.module.tempdeviceservice.production" description="compile module TempDeviceService; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.tempdeviceservice" description="cleanup module">
+    <delete dir="${tempdeviceservice.output.dir}"/>
+    <delete dir="${tempdeviceservice.testoutput.dir}"/>
+  </target>
+</project>
